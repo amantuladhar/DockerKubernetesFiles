@@ -10,6 +10,8 @@ services:
       - DB_URL=jdbc:mysql://myDb:3306/docker_kubernetes?useSSL=false
       - DB_USER=root
       - DB_PASS=password
+    depends_on:
+      - myDb
   myDb:
     image: mysql:5.7
     networks:
