@@ -12,6 +12,7 @@ services:
       - DB_PASS=password
     depends_on:
       - myDb
+    restart: on-failure
   myDb:
     image: mysql:5.7
     networks:
