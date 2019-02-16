@@ -1,2 +1,14 @@
 app:
   version: @project.version@
+
+spring:
+  profiles:
+    active: cloud
+  datasource:
+    url: ${DB_URL}
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
