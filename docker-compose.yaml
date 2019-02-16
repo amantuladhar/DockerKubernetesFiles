@@ -4,9 +4,12 @@ services:
     image: amantuladhar/docker-kubernetes:v1-web
     ports:
       - 9090:8080
-  myTester:                               # 1
-    image: amantuladhar/network-tools     # 2
-    command: sleep 50000                  # 3
+    networks:
+      - myNet
+  myTester:
+    image: amantuladhar/network-tools
+    command: sleep 1500
+    network_mode: service:myApp
   myDb:
     image: mysql:5.7
     environment:
@@ -15,6 +18,8 @@ services:
     volumes:
       - "./volume/mysql-compose/:/var/lib/mysql/"
       - "namedVolume:/test/path"
+networks:
+  myNet:
 volumes:
   namedVolume:
 
