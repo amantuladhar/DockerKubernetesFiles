@@ -1,7 +1,7 @@
 version: '3'
 services:
   myApp:
-    image: amantuladhar/docker-kubernetes:v1-web
+    image: amantuladhar/docker-kubernetes:v1-db
     ports:
       - 9090:8080
   myDb:
