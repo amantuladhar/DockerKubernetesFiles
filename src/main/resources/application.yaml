@@ -2,12 +2,10 @@ app:
   version: @project.version@
 
 spring:
-  profiles:
-    active: cloud
   datasource:
     url: ${DB_URL}
-    username: root
-    password: password
+    username: ${DB_USER}
+    password: ${DB_PASS}
   jpa:
     hibernate:
       ddl-auto: create-drop
