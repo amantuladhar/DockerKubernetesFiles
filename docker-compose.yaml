@@ -1,0 +1,24 @@
+version: '3'
+services:
+  myApp:
+    image: amantuladhar/docker-kubernetes:v1-web
+    ports:
+      - 9090:8080
+    networks:
+      - myNet
+  myTester:
+    image: amantuladhar/network-tools
+    command: sleep 1500
+    network_mode: service:myApp
+  myDb:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=docker_kubernetes
+    volumes:
+      - "./volume/mysql-compose/:/var/lib/mysql/"
+      - "namedVolume:/test/path"
+networks:
+  myNet:
+volumes:
+  namedVolume:
