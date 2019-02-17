@@ -60,6 +60,7 @@
 					<images>
 						<image>
 							<name>docker-kubernetes:${project.version}</name>
+							<alias>my-app</alias>
 							<build>
 								<from>openjdk:8-jre-alpine</from>
 								<assembly>
@@ -80,11 +81,14 @@
 								</ports>
 								<env>
 									<DB_URL>
-										<![CDATA[ jdbc:mysql://mysql_db:3306/docker_kubernetes?useSSL=false ]]>
+										<![CDATA[ jdbc:mysql://localhost:3306/docker_kubernetes?useSSL=false ]]>
 									</DB_URL>
 									<DB_USER>root</DB_USER>
 									<DB_PASS>password</DB_PASS>
 								</env>
+								<dependsOn>
+									<container>mydb</container>
+								</dependsOn>
 							</run>
 						</image>
 						<image>
@@ -95,18 +99,14 @@
 							</build>
 							<run>
 								<network>
-									<mode>custom</mode>
-									<name>mynet</name>
-									<alias>mysql_db</alias>
+									<mode>container</mode>
+									<name>my-app</name>
 								</network>
 								<volumes>
 									<bind>
 										<volume>${project.basedir}/volume/mysql-plugin/:/var/lib/mysql/</volume>
 									</bind>
 								</volumes>
-								<ports>
-									<port>4406:3306</port>
-								</ports>
 								<env>
 									<MYSQL_ROOT_PASSWORD>password</MYSQL_ROOT_PASSWORD>
 									<MYSQL_DATABASE>docker_kubernetes</MYSQL_DATABASE>
