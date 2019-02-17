@@ -51,6 +51,55 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.28.0</version>
+				<configuration>
+					<verbose>true</verbose>
+					<images>
+						<image>
+							<name>docker-kubernetes:${project.version}</name>
+							<build>
+								<from>openjdk:8-jre-alpine</from>
+								<assembly>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<runCmds>
+									<run>apk add --no-cache curl</run>
+								</runCmds>
+								<cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
+							</build>
+							<run>
+								<ports>
+									<port>9090:8080</port>
+								</ports>
+							</run>
+						</image>
+						<image>
+							<name>mydb:${project.version}</name>
+							<alias>mydb</alias>
+							<build>
+								<from>mysql:5.7</from>
+							</build>
+							<run>
+								<volumes>
+									<bind>
+										<volume>${project.basedir}/volume/mysql-plugin/:/var/lib/mysql/</volume>
+									</bind>
+								</volumes>
+								<ports>
+									<port>4406:3306</port>
+								</ports>
+								<env>
+									<MYSQL_ROOT_PASSWORD>password</MYSQL_ROOT_PASSWORD>
+									<MYSQL_DATABASE>docker_kubernetes</MYSQL_DATABASE>
+								</env>
+							</run>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
