@@ -43,9 +43,17 @@
 						<image>
 							<name>docker-kubernetes:${project.version}</name>
 							<build>
-								<dockerFileDir>${project.basedir}</dockerFileDir>
-								<dockerFile>Dockerfile</dockerFile>
+								<from>openjdk:8-jre-alpine</from>
+								<assembly>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
 							</build>
+							<run>
+								<ports>
+									<port>9090:8080</port>
+								</ports>
+							</run>
 						</image>
 					</images>
 				</configuration>
