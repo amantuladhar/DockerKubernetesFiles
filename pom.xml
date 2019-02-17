@@ -47,9 +47,23 @@
 								<assembly>
 									<descriptorRef>artifact</descriptorRef>
 								</assembly>
+								<runCmds>
+									<run>apk add --no-cache curl</run>
+								</runCmds>
 								<cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
+								<healthCheck>
+									<interval>10s</interval>
+									<timeout>5s</timeout>
+									<startPeriod>10s</startPeriod>
+									<retries>3</retries>
+									<cmd>curl --fail http://localhost:8080/test/status-5xx || exit 1</cmd>
+								</healthCheck>
 							</build>
 							<run>
+								<restartPolicy>
+									<name>on-failure</name>
+									<retry>3</retry>
+								</restartPolicy>
 								<ports>
 									<port>9090:8080</port>
 								</ports>
