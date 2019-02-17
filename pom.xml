@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<db.url>jdbc:mysql://localhost:3306/docker_kubernetes?useSSL=false</db.url>
+		<docker.autoCreateCustomNetworks>true</docker.autoCreateCustomNetworks>
 	</properties>
 
 	<dependencies>
@@ -70,9 +71,20 @@
 								<cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
 							</build>
 							<run>
+								<network>
+									<mode>custom</mode>
+									<name>mynet</name>
+								</network>
 								<ports>
 									<port>9090:8080</port>
 								</ports>
+								<env>
+									<DB_URL>
+										<![CDATA[ jdbc:mysql://mysql_db:3306/docker_kubernetes?useSSL=false ]]>
+									</DB_URL>
+									<DB_USER>root</DB_USER>
+									<DB_PASS>password</DB_PASS>
+								</env>
 							</run>
 						</image>
 						<image>
@@ -82,6 +94,11 @@
 								<from>mysql:5.7</from>
 							</build>
 							<run>
+								<network>
+									<mode>custom</mode>
+									<name>mynet</name>
+									<alias>mysql_db</alias>
+								</network>
 								<volumes>
 									<bind>
 										<volume>${project.basedir}/volume/mysql-plugin/:/var/lib/mysql/</volume>
