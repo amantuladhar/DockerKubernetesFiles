@@ -69,6 +69,22 @@
 								</ports>
 							</run>
 						</image>
+						<image>
+							<name>mydb:${project.version}</name>
+							<alias>mydb</alias>
+							<build>
+								<from>mysql:5.7</from>
+							</build>
+							<run>
+								<ports>
+									<port>4406:3306</port>
+								</ports>
+								<env>
+									<MYSQL_ROOT_PASSWORD>password</MYSQL_ROOT_PASSWORD>
+									<MYSQL_DATABASE>docker_kubernetes</MYSQL_DATABASE>
+								</env>
+							</run>
+						</image>
 					</images>
 				</configuration>
 			</plugin>
