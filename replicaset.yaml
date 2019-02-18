@@ -8,9 +8,12 @@ metadata:
 spec:
   replicas: 3
   selector:
-    matchLabels:
-      version: v1
-      env: prod
+    matchExpressions:
+      - key: env
+        operator: In
+        values:
+          - dev
+          - prod
   template:
     metadata:
       name: v1-web
