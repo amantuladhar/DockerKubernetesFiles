@@ -1,29 +1,26 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: v1-web
+  name: v1-web-rs
   labels:
     version: v1
     env: prod
 spec:
   replicas: 3
   selector:
-    matchExpressions:
-      - key: env
-        operator: In
-        values:
-          - dev
-          - prod
+    matchLabels:
+      env: prod
+      version: v1
   template:
     metadata:
-      name: v1-web
+      name: v1-web-po
       labels:
         version: v1
         env: prod
     spec:
       containers:
         - image: amantuladhar/docker-kubernetes:v1-web
-          name: v1-web
+          name: v1-web-con
           livenessProbe:
             httpGet:
               path: /test/
