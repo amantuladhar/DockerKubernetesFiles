@@ -25,5 +25,7 @@ spec:
             httpGet:
               path: /test/
               port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
           ports:
             - containerPort: 8080
