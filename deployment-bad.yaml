@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    version: v1
+    env: prod
+spec:
+  minReadySeconds: 20
+  progressDeadlineSeconds: 30
+  strategy:
+    type: RollingUpdate # Default
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  replicas: 3
+  selector:
+    matchLabels:
+      env: prod
+      version: v1
+  template:
+    metadata:
+      name: web
+      labels:
+        version: v1
+        env: prod
+    spec:
+      containers:
+        - image: amantuladhar/docker-kubernetes:v2-web
+          name: web
+          readinessProbe:
+            httpGet:
+              path: /test/status-5xx
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 1
+          livenessProbe:
+            httpGet:
+              path: /test/
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment    # ReplicaSet
+metadata:
+  name: web-v2
+  labels:
+    version: v2
+    env: prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: prod
+      version: v2
+  template:
+    metadata:
+      name: web-v2
+      labels:
+        version: v2
+        env: prod
+    spec:
+      containers:
+        - image: amantuladhar/docker-kubernetes:v2-web
+          name: web-v2
+          readinessProbe:
+            httpGet:
+              path: /test/
+              port: 8080
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /test/
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          ports:
+            - containerPort: 8080
