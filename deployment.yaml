@@ -18,6 +18,11 @@ spec:
       containers:
         - image: amantuladhar/docker-kubernetes:environment
           name: web
+          env:
+            - name: GREETING
+              value: Namaste
+            - name: NAME
+              value: Folks!!
           readinessProbe:
             httpGet:
               path: /test/
