@@ -32,7 +32,11 @@ public class ExampleRestController {
 
         final HashMap<String, String> map = new HashMap<>();
 
-        map.put("message", "Hello Fellas!!!");
+        final String greeting = env.getProperty("GREETING", "Hello");
+        final String name = env.getProperty("NAME", "Fellas!!");
+        final String message = greeting + " " + name;
+
+        map.put("message", message);
         map.put("host.address", getHostAddress());
         map.put("app.version", appVersion);
 

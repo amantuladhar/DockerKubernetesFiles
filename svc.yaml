@@ -10,4 +10,3 @@ spec:
       nodePort: 30000
   selector:
     env: prod
-    version: v1
