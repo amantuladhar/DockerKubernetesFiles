@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    env: prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: prod
+  template:
+    metadata:
+      name: web
+      labels:
+        env: prod
+    spec:
+      containers:
+        - image: amantuladhar/docker-kubernetes:environment
+          name: web
+          envFrom:
+            - configMapRef:
+                name: web
+          readinessProbe:
+            httpGet:
+              path: /test/
+              port: 8080
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /test/
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          ports:
+            - containerPort: 8080

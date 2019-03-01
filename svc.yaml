@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: web
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 80
       targetPort: 8080
-      nodePort: 30000
   selector:
     env: prod
