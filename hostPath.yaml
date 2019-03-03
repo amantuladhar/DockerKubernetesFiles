@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web_dep
+  labels:
+    app: webonly
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web_rs
+  template:
+    metadata:
+      name: web_po
+      labels:
+        app: webonly
+    spec:
+      containers:
+        - image: amantuladhar/docker-kubernetes:v1-web
+          name: web_co
+          ports:
+            - containerPort: 8080
+
+---
+# Service to Access Above Deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: web_svc
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: webonly
