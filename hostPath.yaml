@@ -1,23 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web_dep
+  name: web-dep
   labels:
     app: webonly
 spec:
-  replicas: 3
+  # ReplicSet Properties
+  replicas: 1
   selector:
     matchLabels:
-      app: web_rs
+      app: webonly
+  # Pod Properties
   template:
     metadata:
-      name: web_po
-      labels:
+      name: web-po
+      labels
         app: webonly
     spec:
+      # Volume Properties
+      volumes:
+        - name: volume-name
+          hostPath:
+            path: /Users/tulada/Desktop/Box/Aman/CloudNative/DockerKubernetesFiles/volume/hostPath
       containers:
         - image: amantuladhar/docker-kubernetes:v1-web
-          name: web_co
+          name: web-co
+          # Which Volume & Where
+          volumeMounts:
+              - name: volume-name
+                mountPath: /containerPath/
           ports:
             - containerPort: 8080
 
@@ -26,7 +37,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: web_svc
+  name: web-svc
 spec:
   type: LoadBalancer
   ports:
