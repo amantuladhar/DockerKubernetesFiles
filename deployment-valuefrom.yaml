@@ -5,7 +5,7 @@ metadata:
   labels:
     env: prod
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       env: prod
@@ -21,12 +21,12 @@ spec:
           env:
             - name: GREETING
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: web # Name of ConfigMaps
                   key: GREETING
             - name: NAME
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: web # Name of ConfigMaps
                   key: NAME
           readinessProbe:

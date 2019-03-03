@@ -19,7 +19,7 @@ spec:
         - image: amantuladhar/docker-kubernetes:environment
           name: web
           envFrom:
-            - configMapRef:
+            - secretRef:
                 name: web
           readinessProbe:
             httpGet:
