@@ -1,0 +1,17 @@
+FROM openjdk:8-jre-alpine
+
+WORKDIR myapp/
+
+COPY ["onlyweb/target/*.jar", "app.jar"]
+
+EXPOSE 8080
+
+RUN apk add --no-cache curl
+
+CMD ["java", "-jar", "app.jar"]
+
+HEALTHCHECK  --start-period=10s \
+             --interval=5s \
+             --timeout=2s  \
+             --retries=3 \
+             CMD curl --fail http://localhost:8080/test/status-5xx || exit 1

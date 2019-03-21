@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mydb-po
+  labels:
+    app: mydb
+spec:
+  # Volume Properties
+  volumes:
+    - name: volume-name
+      hostPath:
+        path: /Users/tulada/Desktop/Box/Aman/CloudNative/DockerKubernetesFiles/volume/kub-mysql
+  containers:
+    - image: mysql:5.7
+      name: mydb-co
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        - name: MYSQL_DATABASE
+          value: docker_kubernetes
+      # Which Volume & Where
+      volumeMounts:
+          - name: volume-name
+            mountPath: /var/lib/mysql/
+
+---
+# Service to Access Above Pod
+# ClusterIP because we don't want to expose DB outside of Cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: mydb-svc
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: mydb

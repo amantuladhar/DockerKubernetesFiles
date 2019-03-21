@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker build -t amantuladhar/doc-kub-ws:$1 -f docker/$1 .

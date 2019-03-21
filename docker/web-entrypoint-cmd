@@ -1,0 +1,15 @@
+FROM openjdk:8-jre-alpine
+
+WORKDIR myapp/
+
+COPY ["onlyweb/target/*.jar", "app.jar"]
+
+EXPOSE 8080
+
+RUN apk add --no-cache curl
+
+ENTRYPOINT ["java", "-jar"]
+
+# CMD is an argument to ENTRYPOINT
+# So when container is run we execute `java -jar app.jar`
+CMD ["app.jar"]

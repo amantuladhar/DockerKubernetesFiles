@@ -1,0 +1,12 @@
+app:
+  version: @project.version@
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
