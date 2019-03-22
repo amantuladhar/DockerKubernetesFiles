@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/test")
+@Slf4j
 public class ExampleRestController {
 
     // To throw Internal Server Error after 5 calls
@@ -29,14 +32,7 @@ public class ExampleRestController {
 
     @GetMapping
     public ResponseEntity<Map<String, String>> helloWorld() {
-
-        final HashMap<String, String> map = new HashMap<>();
-
-        map.put("message", "Hello Fellas!!!");
-        map.put("host.address", getHostAddress());
-        map.put("app.version", appVersion);
-
-        return ResponseEntity.ok(map);
+        return ResponseEntity.ok(getHelloWorldMessage());
     }
 
     @GetMapping("/status-5xx")
@@ -45,19 +41,26 @@ public class ExampleRestController {
         if (COUNT > 5) {
             throw new RuntimeException("Count " + COUNT);
         }
-        final HashMap<String, String> map = new HashMap<>();
 
-        map.put("message", "Status 5xx");
+        final Map<String, String> map = getHelloWorldMessage();
         map.put("count", String.valueOf(COUNT));
-        map.put("host.address", getHostAddress());
-        map.put("app.version", appVersion);
 
         return ResponseEntity.ok(map);
     }
 
+    private Map<String, String> getHelloWorldMessage() {
+        final HashMap<String, String> map = new HashMap<>();
+
+        map.put("app.version", appVersion);
+        map.put("host.address", getHostAddress());
+        map.put("message", env.getProperty("MESSAGE", "Hello Fellas!!!"));
+
+        return map;
+    }
+
     @GetMapping("/exit-1")
     public ResponseEntity<Map<String, String>> exit1() {
-        boolean flag = true;
+        final boolean flag = true;
         if (flag) {
             System.exit(1);
         }
@@ -66,7 +69,7 @@ public class ExampleRestController {
 
     @GetMapping("/exit-0")
     public ResponseEntity<Map<String, String>> exit0() {
-        boolean flag = true;
+        final boolean flag = true;
         if (flag) {
             System.exit(0);
         }
