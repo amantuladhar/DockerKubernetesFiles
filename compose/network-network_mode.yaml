@@ -1,0 +1,23 @@
+version: '3'
+services:
+  myapp:
+    image: amantuladhar/doc-kub-ws:web-basic
+    ports:
+      - 9090:8080
+    networks:
+      - myNet
+  myTester:
+    image: amantuladhar/network-tools
+    command: sleep 50000 # Doing this so that this container runs longer
+    networks:
+      - myNet
+    network_mode: service:myApp
+  mydb:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=docker_kubernetes
+    volumes:
+      - "./volume/mysql-compose/:/var/lib/mysql/"
+networks:
+  myNet:

@@ -1,0 +1,6 @@
+version: '3'
+services:
+  myapp:
+    image: amantuladhar/doc-kub-ws:web-basic
+    ports:
+      - 9090:8080

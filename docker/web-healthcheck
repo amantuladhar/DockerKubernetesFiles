@@ -10,8 +10,4 @@ RUN apk add --no-cache curl
 
 CMD ["java", "-jar", "app.jar"]
 
-HEALTHCHECK  --start-period=10s \
-             --interval=5s \
-             --timeout=2s  \
-             --retries=3 \
-             CMD curl --fail http://localhost:8080/test/status-5xx || exit 1
+HEALTHCHECK  --start-period=10s --retries=3 --interval=5s --timeout=2s CMD curl --fail http://localhost:8080/test/status-5xx || exit 1
