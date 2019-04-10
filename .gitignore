@@ -30,6 +30,3 @@ volume/
 volume
 
 .DS_Store
-
-# Ignoring for this project
-maven.config
