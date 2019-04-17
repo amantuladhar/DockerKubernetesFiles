@@ -7,10 +7,3 @@ services:
   myTester:
     image: amantuladhar/network-tools
     command: sleep 50000 # Doing this so that this container runs longer
-  mydb:
-    image: mysql:5.7
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=docker_kubernetes
-    volumes:
-      - "./volume/mysql-compose/:/var/lib/mysql/"
