@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: v1-web
+  labels:
+    version: v1
+    env: dev
+spec:
+  containers:
+    - image: amantuladhar/doc-kub-ws:web-basic
+      name: v1-web
+      ports:
+        - containerPort: 8080

@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<docker.autoCreateCustomNetworks>true</docker.autoCreateCustomNetworks>
 		<db.url>jdbc:mysql://localhost:3306/docker_kubernetes?useSSL=false</db.url>
 	</properties>
 
@@ -57,6 +58,73 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.28.0</version>
+				<configuration>
+					<verbose>true</verbose>
+					<images>
+						<image>
+							<name>sql:${project.version}</name>
+							<alias>sql</alias>
+							<build>
+								<from>mysql:5.7</from>
+							</build>
+							<run>
+								<network>
+									<mode>custom</mode>
+									<name>mynet</name>
+									<alias>mydb</alias>
+								</network>
+								<volumes>
+									<bind>
+										<volume>${project.basedir}/volume:/var/lib/mysql</volume>
+									</bind>
+								</volumes>
+								<env>
+									<MYSQL_ROOT_PASSWORD>password</MYSQL_ROOT_PASSWORD>
+									<MYSQL_DATABASE>docker_kubernetes</MYSQL_DATABASE>
+								</env>
+							</run>
+						</image>
+						<image>
+							<name>docker-kubernetes:${project.version}</name>
+							<build>
+								<from>openjdk:8-jre-alpine</from>
+								<assembly>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<runCmds>
+									<run>apk add --no-cache curl</run>
+								</runCmds>
+								<cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
+							</build>
+
+							<run>
+								<env>
+									<DB_URL>
+										<![CDATA[ jdbc:mysql://mydb:3306/docker_kubernetes?useSSL=false]]>
+									</DB_URL>
+									<DB_USER>root</DB_USER>
+									<DB_PASS>password</DB_PASS>
+								</env>
+								<network>
+									<mode>custom</mode>
+									<name>mynet</name>
+								</network>
+								<restartPolicy>
+									<name>on-failure</name>
+									<retry>3</retry>
+								</restartPolicy>
+								<ports>
+									<port>9090:8080</port>
+								</ports>
+							</run>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
