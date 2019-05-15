@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: v1web
+  labels:
+    version: v1
+    env: prod
+spec:
+  replicas: 3
+  selector:
+    matchExpressions:
+      - key: version
+        operator: In
+        values:
+          - v1
+          - v2
+      - key: env
+        operator: In
+        values:
+          - prod
+  template:
+    metadata:
+      name: v1web
+      labels:
+        version: v1
+        env: prod
+    spec:
+      containers:
+        - image: amantuladhar/doc-kub-ws:web-basic
+          name: v1web
+          ports:
+            - containerPort: 8080

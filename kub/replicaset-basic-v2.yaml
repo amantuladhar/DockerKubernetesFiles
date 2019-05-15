@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: v2web
+  labels:
+    version: v2
+    env: prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      version: v2
+      env: prod
+  # Pod template from here on out
+  template:
+    metadata:
+      name: v2web
+      labels:
+        version: v2
+        env: prod
+    spec:
+      containers:
+        - image: amantuladhar/doc-kub-ws:web-basic-v2
+          name: v2web
+          ports:
+            - containerPort: 8080

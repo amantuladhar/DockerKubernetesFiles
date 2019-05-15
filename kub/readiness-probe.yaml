@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: v1web
+  labels:
+    version: v1
+    env: prod
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      version: v1
+      env: prod
+  template:
+    metadata:
+      name: v1web
+      labels:
+        version: v1
+        env: prod
+    spec:
+      containers:
+        - image: amantuladhar/doc-kub-ws:web-basic
+          name: v1web
+          readinessProbe:
+            httpGet:
+              path: /test/
+              port: 8080
+            initialDelaySeconds: 10
+          ports:
+            - containerPort: 8080
