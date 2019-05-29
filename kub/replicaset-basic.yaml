@@ -6,7 +6,7 @@ metadata:
     version: v1
     env: prod
 spec:
-  replicas: 2
+  replicas: 5
   selector:
     matchLabels:
       version: v1
