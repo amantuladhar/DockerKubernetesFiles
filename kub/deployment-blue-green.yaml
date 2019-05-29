@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: v2web # v1web -> v2web
+  name: v1web # v1web -> v2web
   labels:
-    version: v2 # v1 -> v2
+    version: v1 # v1 -> v2
     env: prod
 spec:
   replicas: 2
   selector:
     matchLabels:
-      version: v2 # v1 -> v2
+      version: v1 # v1 -> v2
       env: prod
   template:
     metadata:
-      name: v2web # v1web -> v2web
+      name: v1web # v1web -> v2web
       labels:
-        version: v2 # v1 -> v2
+        version: v1 # v1 -> v2
         env: prod
     spec:
       containers:
         - image: amantuladhar/doc-kub-ws:web-basic #  v2
-          name: v2web # v1web -> v2web
+          name: v1web # v1web -> v2web
           readinessProbe:
             httpGet:
               path: /test/
@@ -42,7 +42,7 @@ spec:
       targetPort: 8080
   selector:
     env: prod
-    version: v2 # v1 -> v2
+    version: v1 # v1 -> v2
 
 
 ---
