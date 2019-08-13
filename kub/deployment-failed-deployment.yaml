@@ -24,11 +24,11 @@ spec:
         env: prod
     spec:
       containers:
-        - image: amantuladhar/doc-kub-ws:web-basic #image: amantuladhar/doc-kub-ws:web-basic -> amantuladhar/doc-kub-ws:web-basic-v2
+        - image: amantuladhar/doc-kub-ws:web-basic-v2 #image: amantuladhar/doc-kub-ws:web-basic -> amantuladhar/doc-kub-ws:web-basic-v2
           name: mycontainer
           readinessProbe:
             httpGet:
-              path: /test # path: /test -> /test/status-5xx
+              path: /test/status-5xx # path: /test -> /test/status-5xx
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 1

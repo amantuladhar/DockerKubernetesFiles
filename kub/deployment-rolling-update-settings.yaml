@@ -6,10 +6,7 @@ metadata:
     env: prod
 spec:
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 2
-      maxUnavailable: 1
+    type: Recreate
   replicas: 5
   selector:
     matchLabels:
@@ -22,7 +19,7 @@ spec:
         env: prod
     spec:
       containers:
-        - image: amantuladhar/doc-kub-ws:web-basic
+        - image: amantuladhar/doc-kub-ws:web-basic-v2
           name: mycontainer
           readinessProbe:
             httpGet:
