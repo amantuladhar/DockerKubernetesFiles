@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mydb
+  labels:
+    type: db
+spec:
+  # Volume Properties
+  volumes:
+    - name: mysqlvolume
+      hostPath:
+        path: /Users/tulada/Desktop/Box/Aman/Workshop/volume/mydb
+  containers:
+    - image: mysql:5.7
+      name: mydb-co
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        - name: MYSQL_DATABASE
+          value: docker_kubernetes
+      # Which Volume & Where
+      volumeMounts:
+        - name: mysqlvolume
+          mountPath: /var/lib/mysql/
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  labels:
+    type: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      type: app
+  template:
+    metadata:
+      name: myapppod
+      labels:
+        type: app
+    spec:
+      containers:
+        - image: amantuladhar/doc-kub-ws:withdb-basic
+          name: mycontainer
+          env:
+            - name: DB_SERVER
+              value: "dbservice"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: "docker_kubernetes"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASS
+              value: "password"
+          readinessProbe:
+            httpGet:
+              path: /test/
+              port: 8080
+            initialDelaySeconds: 10
+          ports:
+            - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbservice
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    type: db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 9090
+      targetPort: 8080
+  selector:
+    type: app
+---
+#kind: Service
+#apiVersion: v1
+#metadata:
+#  name: dbservice
+#spec:
+#  type: ExternalName
+#  externalName: host.docker.internal
+#  ports:
+#    - port: 3306
